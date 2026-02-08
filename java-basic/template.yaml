@@ -37,7 +37,7 @@ spec:
       name: Publicando no GitHub
       action: publish:github
       input:
-        repoUrl: github.com?owner=rdurelli&repo=${{ parameters.name }}
+        repoUrl: "github.com?owner=rdurelli&repo=${{ parameters.name }}"
         description: Projeto Java básico criado via Backstage
         defaultBranch: main
 
