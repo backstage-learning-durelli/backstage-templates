@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.name }}
+  description: Projeto FastAPI criado via Backstage com CI/CD e ArgoCD
+  annotations:
+    github.com/project-slug: backstage-learning-durelli/${{ values.name }}
+    argocd/app-name: ${{ values.name }}
+    backstage.io/kubernetes-id: ${{ values.name }}
+  labels:
+    system: ${{ values.name }}
+    managed-by: backstage
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{ values.owner }}
+  system: ${{ values.name }}

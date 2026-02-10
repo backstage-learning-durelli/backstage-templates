@@ -1,0 +1,105 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: fastapi-python
+  title: FastAPI Python Project
+  description: Cria um projeto FastAPI Python com CI/CD e ArgoCD
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: Informações do Projeto
+      required:
+        - name
+        - owner
+        - dockerUsername
+      properties:
+        name:
+          title: Nome do projeto
+          type: string
+          description: "Ex: hello-python"
+          ui:autofocus: true
+        owner:
+          title: Owner
+          type: string
+          description: "Ex: group:default"
+          default: "group:default"
+        dockerUsername:
+          title: Docker Hub Username
+          type: string
+          description: Username do Docker Hub para publicar imagens
+          default: "durellirsd"
+
+  steps:
+    - id: fetch
+      name: Criando projeto base
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          dockerUsername: ${{ parameters.dockerUsername }}
+
+    - id: publish
+      name: Publicando no GitHub
+      action: publish:github
+      input:
+        repoUrl: "github.com?owner=backstage-learning-durelli&repo=${{ parameters.name }}"
+        description: Projeto FastAPI criado via Backstage
+        defaultBranch: main
+        repoVisibility: public
+
+    - id: fetch-argocd-app
+      name: Preparando Application ArgoCD
+      action: fetch:template
+      input:
+        url: ./argocd-application
+        targetPath: ./argocd-app
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+
+    - id: create-argocd-pr
+      name: Criando PR no repo GitOps
+      action: publish:github:pull-request
+      input:
+        repoUrl: "github.com?owner=backstage-learning-durelli&repo=argocd-apps"
+        branchName: add-${{ parameters.name }}
+        title: "feat: Add ArgoCD Application for ${{ parameters.name }}"
+        description: |
+          ## Nova Aplicação: ${{ parameters.name }}
+
+          Esta PR adiciona a configuração do ArgoCD para a aplicação **${{ parameters.name }}**.
+
+          ### Detalhes
+          - **Owner**: ${{ parameters.owner }}
+          - **Repositório**: https://github.com/backstage-learning-durelli/${{ parameters.name }}
+          - **Namespace**: ${{ parameters.name }}
+
+          Criado automaticamente pelo template Backstage `fastapi-python`.
+        sourcePath: argocd-app
+        targetPath: apps/${{ parameters.name }}
+
+    - id: register
+      name: Registrando no Catálogo
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Repositório da Aplicação
+        url: ${{ steps['publish'].output.remoteUrl }}
+        icon: github
+      - title: PR do ArgoCD (GitOps)
+        url: ${{ steps['create-argocd-pr'].output.remoteUrl }}
+        icon: github
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
+      - title: CI/CD Pipeline
+        url: ${{ steps['publish'].output.remoteUrl }}/actions
+        icon: github
