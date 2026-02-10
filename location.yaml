@@ -6,3 +6,4 @@ spec:
   type: url
   targets:
     - https://github.com/backstage-learning-durelli/backstage-templates/blob/main/java-basic/template.yaml
+    - https://github.com/backstage-learning-durelli/backstage-templates/blob/main/fastapi-python/template.yaml
