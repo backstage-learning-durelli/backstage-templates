@@ -129,12 +129,11 @@ curl http://localhost:8000/health
 Este projeto possui um pipeline de CI/CD configurado que é executado automaticamente:
 
 **Em Pull Requests:**
-- Executa linting (black, isort, flake8)
 - Executa testes unitários com coverage
 - Gera relatórios de cobertura
 
 **No branch `main`:**
-1. ✅ Executa linting e testes
+1. ✅ Executa testes
 2. ✅ Builda a aplicação com Poetry
 3. ✅ Cria imagem Docker otimizada
 4. ✅ Publica no Docker Hub (`${{ values.dockerUsername }}/${{ values.name }}`)
