@@ -2,7 +2,7 @@
 
 Projeto Spring Boot criado com Backstage, incluindo CI/CD e deploy automático via ArgoCD.
 
-[![CI/CD](https://github.com/rdurelli/${{ values.name }}/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/rdurelli/${{ values.name }}/actions/workflows/ci-cd.yaml)
+[![CI/CD](https://github.com/backstage-learning-durelli/${{ values.name }}/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/backstage-learning-durelli/${{ values.name }}/actions/workflows/ci-cd.yaml)
 
 ## 🚀 Tecnologias
 

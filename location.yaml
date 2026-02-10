@@ -5,4 +5,4 @@ metadata:
 spec:
   type: url
   targets:
-    - https://github.com/rdurelli/backstage-templates/blob/main/java-basic/template.yaml
+    - https://github.com/backstage-learning-durelli/backstage-templates/blob/main/java-basic/template.yaml
