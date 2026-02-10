@@ -4,7 +4,7 @@ FROM python:3.11-slim as builder
 WORKDIR /app
 
 # Install Poetry
-RUN pip install --no-cache-dir poetry==1.7.1
+RUN pip install --no-cache-dir poetry==1.8.2
 
 # Copy dependency files
 COPY pyproject.toml poetry.lock* ./
@@ -13,7 +13,7 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry config virtualenvs.create false
 
 # Install dependencies
-RUN poetry install --no-dev --no-interaction --no-ansi
+RUN poetry install --only main --no-interaction --no-ansi --no-root
 
 # Final stage
 FROM python:3.11-slim
