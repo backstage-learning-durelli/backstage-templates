@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: ${{ values.name }}
-        image: ${{ values.dockerUsername }}/${{ values.name }}:latest
+        image: ${{ values.dockerUsername }}/${{ values.name }}:v0.0.0
         ports:
         - containerPort: 8080
           name: http
