@@ -63,7 +63,7 @@ jobs:
         id: image-tag
         run: |
           SHORT_SHA=$(echo ${{ '${{ github.sha }}' }} | cut -c1-7)
-          echo "tag=main-${SHORT_SHA}" >> ${{ '${{ GITHUB_OUTPUT }}' }}
+          echo "tag=main-${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "Image tag will be: main-${SHORT_SHA}"
 
       - name: Login to Docker Hub
