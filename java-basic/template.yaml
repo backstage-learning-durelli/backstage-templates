@@ -49,6 +49,7 @@ spec:
         repoUrl: "github.com?owner=backstage-learning-durelli&repo=${{ parameters.name }}"
         description: Projeto Spring Boot criado via Backstage
         defaultBranch: main
+        repoVisibility: public
 
     - id: fetch-argocd-app
       name: Preparando Application ArgoCD
