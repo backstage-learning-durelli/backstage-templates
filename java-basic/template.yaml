@@ -49,9 +49,6 @@ spec:
         repoUrl: "github.com?owner=backstage-learning-durelli&repo=${{ parameters.name }}"
         description: Projeto Spring Boot criado via Backstage
         defaultBranch: main
-        secrets:
-          DOCKERHUB_USERNAME: durellirsd
-          DOCKERHUB_TOKEN: dckr_pat_7roKCZzpjApIdNxElJDQgRJF-ic
 
     - id: fetch-argocd-app
       name: Preparando Application ArgoCD
