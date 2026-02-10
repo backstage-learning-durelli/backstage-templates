@@ -7,11 +7,11 @@ metadata:
     managed-by: backstage
     owner: ${{ values.owner }}
   annotations:
-    backstage.io/source-location: "url:https://github.com/rdurelli/${{ values.name }}"
+    backstage.io/source-location: "url:https://github.com/backstage-learning-durelli/${{ values.name }}"
 spec:
   project: default
   source:
-    repoURL: https://github.com/rdurelli/${{ values.name }}.git
+    repoURL: https://github.com/backstage-learning-durelli/${{ values.name }}.git
     targetRevision: HEAD
     path: k8s
   destination:
