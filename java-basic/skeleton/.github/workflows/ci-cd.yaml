@@ -81,23 +81,28 @@ jobs:
             ${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}/${{ values.name }}:${{ '${{ steps.image-tag.outputs.tag }}' }}
             ${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}/${{ values.name }}:latest
 
-      - name: Update Kubernetes manifest
+      - name: Checkout repository again
+        uses: actions/checkout@v4
+        with:
+          token: ${{ '${{ secrets.GITHUB_TOKEN }}' }}
+          fetch-depth: 0
+
+      - name: Install yq
         run: |
-          sed -i "s|image: .*/${{ values.name }}:.*|image: ${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}/${{ values.name }}:${{ '${{ steps.image-tag.outputs.tag }}' }}|g" k8s/deployment.yaml
+          sudo wget https://github.com/mikefarah/yq/releases/download/v4.35.1/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Update Kubernetes manifest with yq
+        run: |
+          NEW_IMAGE="${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}/${{ values.name }}:${{ '${{ steps.image-tag.outputs.tag }}' }}"
+          yq e ".spec.template.spec.containers[0].image = \"${NEW_IMAGE}\"" -i k8s/deployment.yaml
+          echo "Updated image to: ${NEW_IMAGE}"
           cat k8s/deployment.yaml | grep "image:"
 
-      - name: Create Pull Request with manifest changes
-        uses: peter-evans/create-pull-request@v6
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
         with:
-          commit-message: "chore: Update image tag to ${{ '${{ steps.image-tag.outputs.tag }}' }}"
-          title: "chore: Update image tag to ${{ '${{ steps.image-tag.outputs.tag }}' }}"
-          body: |
-            ## Automated Image Tag Update
-
-            Nova imagem Docker publicada:
-            - **Tag**: `${{ '${{ steps.image-tag.outputs.tag }}' }}`
-            - **Commit**: ${{ '${{ github.sha }}' }}
-
-            Este PR foi criado automaticamente pelo CI/CD.
-          branch: update-image-${{ '${{ steps.image-tag.outputs.tag }}' }}
-          delete-branch: true
+          message: "chore: Update image tag to ${{ '${{ steps.image-tag.outputs.tag }}' }}"
+          add: k8s/deployment.yaml
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
