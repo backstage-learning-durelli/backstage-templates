@@ -51,6 +51,13 @@ spec:
         defaultBranch: main
         repoVisibility: public
 
+    - id: remove-branch-protection
+      name: Removendo proteção do branch main
+      action: github:api
+      input:
+        method: DELETE
+        path: /repos/backstage-learning-durelli/${{ parameters.name }}/branches/main/protection
+
     - id: fetch-argocd-app
       name: Preparando Application ArgoCD
       action: fetch:template
