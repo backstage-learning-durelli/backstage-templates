@@ -71,20 +71,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ '${{ env.PYTHON_VERSION }}' }}
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Export requirements for Docker
-        run: |
-          poetry export -f requirements.txt --output requirements.txt --without-hashes
-
       - name: Set image tag
         id: image-tag
         run: |
